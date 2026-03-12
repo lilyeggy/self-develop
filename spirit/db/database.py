@@ -3,14 +3,14 @@ from contextlib import asynccontextmanager
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+from sqlalchemy.pool import StaticPool
 
-from spirit.core.config import settings
 from spirit.db.models import Base
 
 
 def get_sync_database_url() -> str:
     """获取同步数据库URL"""
-    url = settings.DATABASE_URL
+    url = os.getenv("DATABASE_URL", "sqlite:///./spirit.db")
     
     if url.startswith("sqlite"):
         return url
@@ -21,28 +21,49 @@ def get_sync_database_url() -> str:
     return url
 
 
-if settings.DATABASE_URL.startswith("sqlite"):
+def get_async_database_url() -> str:
+    """获取异步数据库URL"""
+    url = os.getenv("DATABASE_URL", "sqlite:///./spirit.db")
+    
+    if url.startswith("sqlite"):
+        return url.replace("sqlite:///", "sqlite+aiosqlite:///")
+    
+    if "+asyncpg" not in url:
+        return url + "+asyncpg"
+    
+    return url
+
+
+if os.getenv("DATABASE_URL", "").startswith("sqlite"):
+    async_url = get_async_database_url()
+    sync_url = get_sync_database_url()
+    
     engine = create_async_engine(
-        settings.DATABASE_URL,
-        echo=settings.DEBUG,
-        connect_args={"check_same_thread": False}
+        async_url,
+        echo=False,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool
     )
     sync_engine = create_engine(
-        get_sync_database_url(),
-        echo=settings.DEBUG,
-        connect_args={"check_same_thread": False}
+        sync_url,
+        echo=False,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool
     )
 else:
+    async_url = get_async_database_url()
+    sync_url = get_sync_database_url()
+    
     engine = create_async_engine(
-        settings.DATABASE_URL,
-        echo=settings.DEBUG,
+        async_url,
+        echo=False,
         pool_pre_ping=True,
         pool_size=10,
         max_overflow=20,
     )
     sync_engine = create_engine(
-        get_sync_database_url(),
-        echo=settings.DEBUG,
+        sync_url,
+        echo=False,
     )
 
 AsyncSessionLocal = async_sessionmaker(
