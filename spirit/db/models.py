@@ -92,7 +92,7 @@ class Thought(Base):
     is_archived = Column(Boolean, default=False)
     is_favorite = Column(Boolean, default=False)
     
-    metadata = Column(JSON, default=dict)
+    extra_metadata = Column(JSON, default=dict)
     
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

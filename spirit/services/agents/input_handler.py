@@ -29,9 +29,9 @@ class InputHandlerAgent:
         if not thought.tags:
             thought.tags = extract_tags(content)
         
-        thought.metadata = thought.metadata or {}
-        thought.metadata["word_count"] = len(content)
-        thought.metadata["char_count"] = len(content.replace(" ", ""))
+        thought.extra_metadata = thought.extra_metadata or {}
+        thought.extra_metadata["word_count"] = len(content)
+        thought.extra_metadata["char_count"] = len(content.replace(" ", ""))
         
         return thought
     
