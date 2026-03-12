@@ -9,9 +9,19 @@ class LLMService:
     
     def __init__(self):
         self.client = None
-        if settings.OPENAI_API_KEY:
-            self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
-        self.model = settings.OPENAI_MODEL
+        self.use_modelscope = settings.USE_MODELSCOPE
+        
+        if settings.USE_MODELSCOPE:
+            if settings.MODELSCOPE_API_KEY:
+                self.client = AsyncOpenAI(
+                    api_key=settings.MODELSCOPE_API_KEY,
+                    base_url="https://api.modelscope.cn/v1"
+                )
+                self.model = settings.MODELSCOPE_MODEL
+        else:
+            if settings.OPENAI_API_KEY:
+                self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+                self.model = settings.OPENAI_MODEL
     
     async def generate(self, prompt: str, max_tokens: int = 1000) -> Optional[str]:
         """生成文本"""

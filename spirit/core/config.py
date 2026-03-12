@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: str = "gpt-4"
     
+    MODELSCOPE_API_KEY: Optional[str] = None
+    MODELSCOPE_MODEL: str = "qwen-plus"
+    USE_MODELSCOPE: bool = False
+    
     DEFAULT_REVIEW_PERIOD: str = "weekly"
     
     class Config:
