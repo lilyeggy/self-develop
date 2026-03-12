@@ -46,7 +46,7 @@ async def create_thought(
         user_id=current_user.id,
         content=content,
         raw_content=content,
-        category=ThoughtCategory(category),
+        category=category,
         title=thought.title,
         tags=tags,
         source=thought.source,
@@ -148,7 +148,7 @@ async def update_thought(
         update_data["raw_content"] = update_data["content"]
     
     if "category" in update_data and update_data["category"]:
-        update_data["category"] = ThoughtCategory(update_data["category"])
+        update_data["category"] = update_data["category"]
     
     if "tags" not in update_data or update_data["tags"] is None:
         if "content" in update_data:
