@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     OPENAI_MODEL: str = "gpt-4"
     
     MODELSCOPE_API_KEY: Optional[str] = None
-    MODELSCOPE_MODEL: str = "glm-5-flash"
+    MODELSCOPE_MODEL: str = "glm-5"
     USE_MODELSCOPE: bool = False
     
     DEFAULT_REVIEW_PERIOD: str = "weekly"
