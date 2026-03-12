@@ -26,7 +26,10 @@ def get_async_database_url() -> str:
     url = os.getenv("DATABASE_URL", "sqlite:///./spirit.db")
     
     if url.startswith("sqlite"):
-        return url.replace("sqlite:///", "sqlite+aiosqlite:///")
+        if url.startswith("sqlite:///"):
+            path = url.replace("sqlite:///", "", 1)
+            return f"sqlite+aiosqlite:///{path}"
+        return url.replace("sqlite://", "sqlite+aiosqlite://", 1)
     
     if "+asyncpg" not in url:
         return url + "+asyncpg"
