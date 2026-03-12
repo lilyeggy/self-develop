@@ -99,7 +99,7 @@ class Thought(Base):
     thinking_started_at = Column(DateTime, nullable=True)
     
     user = relationship("User", back_populates="thoughts")
-    category = relationship("UserCategory", back_populates="thoughts")
+    category_obj = relationship("UserCategory", back_populates="thoughts")
     expansions = relationship("ThoughtExpansion", back_populates="thought", cascade="all, delete-orphan")
     related_thoughts = relationship(
         "ThoughtRelation",
