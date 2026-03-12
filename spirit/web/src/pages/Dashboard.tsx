@@ -83,7 +83,7 @@ function Dashboard() {
         </div>
         <div className="stat-card">
           <h3>本月新增</h3>
-          <div className="value">{analytics?.thoughts_by_category ? Object.values(analytics.thoughts_by_category).reduce((a: any, b: any) => a + b, 0) : 0}</div>
+          <div className="value">{analytics?.thoughts_by_category ? Object.values(analytics.thoughts_by_category).reduce((a: any, b: any) => a + b, 0) as number : 0}</div>
         </div>
         <div className="stat-card">
           <h3>今日记录</h3>
